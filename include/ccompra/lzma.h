@@ -22,6 +22,7 @@ typedef struct CCOMPRA_EXPORT {
 
 CCOMPRA_PUBLIC_FUNC char *lzma_compress(const char *input);
 CCOMPRA_PUBLIC_FUNC char *lzma_decompress(const char *decompress);
+CCOMPRA_PUBLIC_FUNC size_t lzma_compress_bound(size_t srcSz);
 
 CCOMPRA_EXTERN_C_END
 

@@ -2,9 +2,7 @@
 #include <stdio.h>
 #include <assert.h>
 
-void rununit(void) {
-    const char *input = "AAAABBBCCDDEEEEEFGGGHHHHIIIIJJJKKLLLMMMNNN";
-
+void __stack_unit(const char *input) {
     {
         char *lz77c = lz77_compress(input);
         char *lz77d = lz77_decompress(lz77c);
@@ -101,4 +99,94 @@ void rununit(void) {
         free(zstdc); free(zstdd);
         printf("ZSTD:    Passed!\n");
     }
+}
+
+void __heap_unit(const char *input) {
+    size_t srcSz = strlen(input);
+
+    // LZ77
+    {
+        size_t bound = lz77_compress_bound(srcSz);
+        char *lz77c = (char *)malloc(bound);
+        char *lz77d = (char *)malloc(srcSz + 1);
+        assert(lz77c && lz77d && "Memory allocation failed!");
+        memcpy(lz77c, lz77_compress(input), bound);
+        memcpy(lz77d, lz77_decompress(lz77c), srcSz + 1);
+        assert(strcmp(input, lz77d) == 0 && "LZ77 decompression failed!");
+        free(lz77c); free(lz77d);
+        printf("LZ77:    Passed!\n");
+    }
+
+    // LZMA
+    {
+        size_t bound = lzma_compress_bound(srcSz);
+        char *lzmac = (char *)malloc(bound);
+        char *lzmad = (char *)malloc(srcSz + 1);
+        assert(lzmac && lzmad && "Memory allocation failed!");
+        memcpy(lzmac, lzma_compress(input), bound);
+        memcpy(lzmad, lzma_decompress(lzmac), srcSz + 1);
+        assert(strcmp(input, lzmad) == 0 && "LZMA decompression failed!");
+        free(lzmac); free(lzmad);
+        printf("LZMA:    Passed!\n");
+    }
+
+    // Huffman
+    {
+        size_t bound = huffman_compress_bound(srcSz);
+        HuffmanCompressed *huffc = (HuffmanCompressed *)malloc(bound);
+        char *huffd = (char *)malloc(srcSz + 1);
+        assert(huffc && huffd && "Memory allocation failed!");
+        memcpy(huffc, huffman_compress(input), bound);
+        memcpy(huffd, huffman_decompress(huffc), srcSz + 1);
+        assert(strcmp(input, huffd) == 0 && "Huffman decompression failed!");
+        free(huffc); free(huffd);
+        printf("Huffman: Passed!\n");
+    }
+
+    // Huffman
+    {
+        size_t bound = deflate_compress_bound(srcSz);
+        HuffmanCompressed *deflatec = (HuffmanCompressed *)malloc(bound);
+        char *deflated = (char *)malloc(srcSz + 1);
+        assert(deflatec && deflated && "Memory allocation failed!");
+        memcpy(deflatec, deflate_compress(input), bound);
+        memcpy(deflated, deflate_decompress(deflatec), srcSz + 1);
+        assert(strcmp(input, deflated) == 0 && "Huffman decompression failed!");
+        free(deflatec); free(deflated);
+        printf("Deflate: Passed!\n");
+    }
+
+    // FSE
+    {
+        size_t bound = fse_compress_bound(srcSz);
+        FSECompressed *fsec = (FSECompressed *)malloc(bound);
+        char *fsed = (char *)malloc(srcSz + 1);
+        assert(fsec && fsed && "Memory allocation failed!");
+        memcpy(fsec, fse_compress(input), bound);
+        memcpy(fsed, fse_decompress(fsec), srcSz + 1);
+        assert(strcmp(input, fsed) == 0 && "FSE decompression failed!");
+        free(fsec); free(fsed);
+        printf("FSE:     Passed!\n");
+    }
+
+    // ZSTD
+    {
+        size_t bound = zstd_compress_bound(srcSz);
+        FSECompressed *zstdc = (FSECompressed *)malloc(bound);
+        char *zstdd = (char *)malloc(srcSz + 1);
+        assert(zstdc && zstdd && "Memory allocation failed!");
+        memcpy(zstdc, zstd_compress(input), bound);
+        memcpy(zstdd, zstd_decompress(zstdc), srcSz + 1);
+        assert(strcmp(input, zstdd) == 0 && "ZSTD decompression failed!");
+        free(zstdc); free(zstdd);
+        printf("ZSTD:    Passed!\n");
+    }
+}
+
+void rununit(void) {
+    const char *input = "AAAABBBCCDDEEEEEFGGGHHHHIIIIJJJKKLLLMMMNNN";
+    printf("Running unit test 1..\n");
+    __stack_unit(input);
+    printf("Running unit test 2..\n");
+    __heap_unit(input);
 }

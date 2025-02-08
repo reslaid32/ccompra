@@ -18,3 +18,9 @@ char* deflate_decompress(HuffmanCompressed *compressed) {
     free(lz77Serialized);
     return output;
 }
+
+CCOMPRA_PUBLIC_FUNC
+size_t deflate_compress_bound(size_t srcSz) {
+    size_t sz = lz77_compress_bound(srcSz);
+    return huffman_compress_bound(sz);
+}

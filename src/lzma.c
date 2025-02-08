@@ -98,3 +98,10 @@ char* lzma_decompress(const char *compressed) {
     free(tokens);
     return output;
 }
+
+CCOMPRA_PUBLIC_FUNC
+size_t lzma_compress_bound(size_t srcSz) {
+    if (srcSz == 0)
+        return 1;
+    return srcSz + (srcSz / 3) + 128;
+}

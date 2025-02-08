@@ -145,3 +145,8 @@ char* fse_decompress(const FSECompressed *comp) {
     output[nSymbols] = '\0';
     return output;
 }
+
+CCOMPRA_PUBLIC_FUNC
+size_t fse_compress_bound(size_t srcSz) {
+    return srcSz + (srcSz >> 7) + 1;
+}

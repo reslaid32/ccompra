@@ -15,6 +15,7 @@ typedef struct CCOMPRA_EXPORT {
 
 CCOMPRA_PUBLIC_FUNC HuffmanCompressed *huffman_compress(const char *text);
 CCOMPRA_PUBLIC_FUNC char *huffman_decompress(const HuffmanCompressed *compressed);
+CCOMPRA_PUBLIC_FUNC size_t huffman_compress_bound(size_t srcSz);
 
 CCOMPRA_EXTERN_C_END
 

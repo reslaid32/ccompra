@@ -16,6 +16,7 @@ CCOMPRA_EXTERN_C_BEG
 
 CCOMPRA_PUBLIC_FUNC char *lz77_compress(const char *input);
 CCOMPRA_PUBLIC_FUNC char *lz77_decompress(const char *compressed);
+CCOMPRA_PUBLIC_FUNC size_t lz77_compress_bound(size_t srcSz);
 
 CCOMPRA_EXTERN_C_END
 

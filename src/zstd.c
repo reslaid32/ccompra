@@ -18,3 +18,9 @@ char* zstd_decompress(FSECompressed *compressed) {
     free(lz77Serialized);
     return output;
 }
+
+CCOMPRA_PUBLIC_FUNC
+size_t zstd_compress_bound(size_t srcSz) {
+    size_t sz = lz77_compress_bound(srcSz);
+    return fse_compress_bound(sz);
+}

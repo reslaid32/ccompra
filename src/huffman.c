@@ -281,3 +281,24 @@ char* huffman_decompress(const HuffmanCompressed *compressed) {
     freeHuffmanTree(root);
     return result;
 }
+
+CCOMPRA_PUBLIC_FUNC
+size_t huffman_compress_bound(size_t srcSz) {
+    if (srcSz == 0)
+        return 1;  // At least one byte to represent an empty output.
+    
+    // Worst-case frequency table: assume every one of 256 possible symbols appears,
+    // and each is encoded as a string pair (e.g. \"123:456,\") taking up to ~25 bytes.
+    size_t freqBound = 256 * 25; // = 6400 bytes (overestimate)
+    
+    // Worst-case bit string:
+    // When 256 symbols appear the worst-case Huffman code length can be 255 bits.
+    // (A completely skewed tree with 256 leaves can have maximum code length 255.)
+    size_t bitStringBound = srcSz * 255;
+    
+    // When packing bits into bytes, the size is rounded up.
+    size_t packedDataBound = (bitStringBound + 7) / 8;
+    
+    // Total worst-case bound: frequency table + packed data.
+    return freqBound + packedDataBound;
+}

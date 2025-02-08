@@ -3,6 +3,12 @@
 #include "../include/ccompra/lz77.h"
 
 CCOMPRA_PUBLIC_FUNC
+size_t lz77_compress_bound(size_t srcSz) {
+    // In the worst case, each input byte becomes "L,<char>;" (4 characters)
+    return srcSz * 4 + 1;
+}
+
+CCOMPRA_PUBLIC_FUNC
 char* lz77_compress(const char *input) {
     size_t inLen = strlen(input);
     size_t outCap = inLen * 4 + 1;

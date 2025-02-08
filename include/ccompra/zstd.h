@@ -11,6 +11,7 @@ CCOMPRA_EXTERN_C_BEG
 
 CCOMPRA_PUBLIC_FUNC FSECompressed *zstd_compress(const char *input);
 CCOMPRA_PUBLIC_FUNC char *zstd_decompress(FSECompressed *compressed);
+CCOMPRA_PUBLIC_FUNC size_t zstd_compress_bound(size_t srcSz);
 
 CCOMPRA_EXTERN_C_END
 

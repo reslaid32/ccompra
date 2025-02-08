@@ -15,6 +15,7 @@ typedef struct CCOMPRA_EXPORT {
 
 CCOMPRA_PUBLIC_FUNC FSECompressed *fse_compress(const char *input);
 CCOMPRA_PUBLIC_FUNC char *fse_decompress(const FSECompressed *compressed);
+CCOMPRA_PUBLIC_FUNC size_t fse_compress_bound(size_t srcSz);
 
 CCOMPRA_EXTERN_C_END
 
