@@ -143,10 +143,10 @@ void __heap_unit(const char *input) {
         printf("Huffman: Passed!\n");
     }
 
-    // Huffman
+    // Deflate
     {
         size_t bound = deflate_compress_bound(srcSz);
-        HuffmanCompressed *deflatec = (HuffmanCompressed *)malloc(bound);
+        DeflateCompressed *deflatec = (DeflateCompressed *)malloc(bound);
         char *deflated = (char *)malloc(srcSz + 1);
         assert(deflatec && deflated && "Memory allocation failed!");
         memcpy(deflatec, deflate_compress(input), bound);
